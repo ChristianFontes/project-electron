@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import { TextField } from 'material-ui';
+import { TextField, RaisedButton } from 'material-ui';
+import { login } from '../api/constants';
 
 export default class Login extends Component {
   static propTypes = {
@@ -10,7 +11,9 @@ export default class Login extends Component {
    super(props);
    this.state = {
      email: '',
-     password: ''
+     password: '',
+     errorEmail: '',
+     errorPassword: ''
    };
   }
 
@@ -32,19 +35,43 @@ export default class Login extends Component {
       email: this.state.email,
       password: this.state.password
     }
-
-    fetch('http://localhost:1337/login', {
+    fetch(login, {
       method: 'post',
       headers: {
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(credentials)
-    }).then(res=>res.json())
-      .then(res => console.log(res));
-    //onLogin({ email, password, loggedIn: true });
-
-    //this.props.router.push('/loggedin');
+    }).then(res => res.json())
+      .then(res => {
+        if (res.user) {
+          const { email, username, avatar } = res.user;
+          onLogin({ email, username, avatar, loggedIn: true });
+          this.setState({
+            errorEmail: '',
+            errorPassword: ''
+          });
+          this.props.router.push('/loggedin');
+        }else{
+          if (res.error == 'Email y Contraseña son requeridas') {
+            this.setState({
+              errorEmail: 'El email es requerido',
+              errorPassword: 'La contraseña es requerida'
+            })
+          }else if (res.error == 'Email y Contraseña no coinciden') {
+            this.setState({
+              errorPassword: 'Revise su contraseña',
+              errorEmail: 'El email no coincide con su contraseña'
+            })
+          }else {
+            this.setState({
+              errorPassword: '',
+              errorEmail: 'El email no se encuentra registrado'
+            })
+          }
+        }
+      }
+    );
   }
 
   render() {
@@ -54,13 +81,15 @@ export default class Login extends Component {
         <TextField
           hintText="Email"
           value={this.state.email} onChange={this.handleChangeEmail}
+          errorText={this.state.errorEmail}
         /><br/>
         <TextField
+          type="password"
           hintText="Password"
           value={this.state.password} onChange={this.handleChangePassword}
+          errorText={this.state.errorPassword}
         /><br/>
-        <input ref="username" type="text" />
-        <button onClick={::this.handleLogin}>Log In</button>
+        <RaisedButton label="Iniciar Sesion" primary={true} onClick={::this.handleLogin} />
       </div>
     );
   }
