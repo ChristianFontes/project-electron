@@ -28,7 +28,20 @@ export default class Login extends Component {
 
   handleLogin = () => {
     const { onLogin } = this.props;
-    console.log(this.state);
+    let credentials = {
+      email: this.state.email,
+      password: this.state.password
+    }
+
+    fetch('http://localhost:1337/login', {
+      method: 'post',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(credentials)
+    }).then(res=>res.json())
+      .then(res => console.log(res));
     //onLogin({ email, password, loggedIn: true });
 
     //this.props.router.push('/loggedin');
