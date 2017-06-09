@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { register } from '../../api/constants';
+import { register, ticket } from '../../api/constants';
 import {
   Table,
   TableBody,
@@ -13,6 +13,15 @@ import {
   AppBar,
   RaisedButton
 } from 'material-ui';
+
+var socketIOClient = require('socket.io-client');
+var sailsIOClient = require('sails.io.js');
+
+var io = sailsIOClient(socketIOClient);
+
+// Set some options:
+// (you have to specify the host and port of the Sails backend when using this library from Node.js)
+io.sails.url = 'http://localhost:1337';
 
 export default class ListMember extends Component {
   constructor(props) {
@@ -44,6 +53,19 @@ export default class ListMember extends Component {
         // This is where you run code if the server returns any errors
         console.log(err);
     });
+  }
+
+  componentDidMount() {
+    const { id } = this.props;
+    let url = register + '/' + id + '/tickets';
+    io.socket.on('connect', function() {
+      io.socket.on('new ticket', function(obj) {
+        io.socket.get(url, function(data) {
+          this.setState({data});
+        }.bind(this));
+      }.bind(this));
+
+    }.bind(this));
   }
 
   updateList = () => {
