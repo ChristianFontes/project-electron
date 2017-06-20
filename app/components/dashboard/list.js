@@ -68,16 +68,7 @@ export default class ListMember extends Component {
       id: obj.id
     });
   }
-  //
-  // updateUser = (obj) => {
-  //   const { dispatch, router } = this.props;
-  //   let userToUpdate = {
-  //     userToUpdate: obj
-  //   };
-  //   dispatch(userToUpdate);
-  //   router.push('/editmember');
-  // }
-  //
+  
   confirmation = (value) => {
     if (value) {
       let id = '/' + this.state.id;
@@ -117,7 +108,7 @@ export default class ListMember extends Component {
         marginBottom: 10
       }
 
-      let deleteUser = 'Si deseo eliminar el ticket creado por '+ this.state.selection.user[0].userName + ' ?';
+      let deleteUser = 'Si deseo eliminar el ticket creado por '+ this.checkIfExist(this.state.selection.user[0], 'userName') + ' ?';
 
       return (
         <CardActions style={style}>
@@ -130,32 +121,6 @@ export default class ListMember extends Component {
       <FlatButton label="Eliminar Ticket" onClick={() => this.delete(this.state.selection)} />
     );
   }
-  //
-  // renderButtones = () => {
-  //   if (this.state.selection != null || this.state.selection != undefined) {
-  //     let titleEdit = 'Editar al empleado ' + this.state.selection.name + ' ' + this.state.selection.lastName;
-  //     let titleDelete = 'Eliminar a ' + this.state.selection.name + ' ' + this.state.selection.lastName;
-  //     const style = {
-  //       width: '90%',
-  //       marginLeft: '5%',
-  //       marginRigth: '5%',
-  //       alignItems: 'center'
-  //     }
-  //
-  //     const styleButton = {
-  //       marginBottom: 10
-  //     }
-  //
-  //     return (
-  //       <CardActions style={style}>
-  //         <RaisedButton label={titleEdit} onClick={() => this.updateUser(this.state.selection)} style={styleButton} primary={true} fullWidth={true} />
-  //         <RaisedButton label={titleDelete} onClick={() => this.delete(this.state.selection)} secondary={true} fullWidth={true} />
-  //         { this.renderConfirmation() }
-  //       </CardActions>
-  //     );
-  //   }
-  //   return null;
-  // }
 
   renderTicket = () => {
   if (this.state.selection != null || this.state.selection != undefined) {
@@ -169,7 +134,7 @@ export default class ListMember extends Component {
         marginLeft: '15%'
       }
       let obj = this.state.selection;
-      let createdBy = 'Creado por: ' + obj.user[0].userName;
+      let createdBy = 'Creado por: ' + this.checkIfExist(obj.user[0], 'userName');
       return(
         <Card style={style}>
           <CardHeader
@@ -204,6 +169,18 @@ export default class ListMember extends Component {
     return datestring;
   }
 
+  checkIfExist(data, type) {
+    if (data !== undefined) {
+      if (type == 'userName') {
+        return data.userName;
+      }else if (type == 'typeMember') {
+        return data.typeMember;
+      }
+    }else{
+      return null;
+    }
+  }
+
   render() {
     const data = this.state.data;
     const styleTable = {
@@ -231,8 +208,8 @@ export default class ListMember extends Component {
               data.map( (row, index) => (
                 <TableRow key={index}>
                   <TableRowColumn>{data[index].title}</TableRowColumn>
-                  <TableRowColumn>{data[index].user[0].userName}</TableRowColumn>
-                  <TableRowColumn>{data[index].user[0].typeMember}</TableRowColumn>
+                  <TableRowColumn>{this.checkIfExist(data[index].user[0], 'userName')}</TableRowColumn>
+                  <TableRowColumn>{this.checkIfExist(data[index].user[0], 'typeMember')}</TableRowColumn>
                   <TableRowColumn>{this.formatDate(data[index].createdAt)}</TableRowColumn>
                 </TableRow>
               ))

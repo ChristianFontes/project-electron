@@ -16,7 +16,6 @@ export default class LoggedIn extends Component {
 
   render() {
     const { typeMember, name, lastName } = this.props.user;
-    console.log(this.props);
     let imgUrl = '../app/images/bg.jpg';
     let fullName = name + ' ' + lastName;
     var background = {
@@ -38,10 +37,12 @@ export default class LoggedIn extends Component {
           <CardOption router={this.props.router} path='/listmember' title='Lista de Empleados'/>
           <CardOption router={this.props.router} path='/addticket' title='Agregar Ticket'/>
           <CardOption router={this.props.router} path='/listticket' title='Lista de Tickets'/>
-          <CardOption router={this.props.router} path='/addmember' title='Inventario'/>
-          <CardOption router={this.props.router} path='/addmember' title='Incidencias'/>
-          <CardOption router={this.props.router} path='/addmember' title='Sedes'/>
-          <CardOption router={this.props.router} path='/listmember' title='Departamentos'/>
+          <CardOption router={this.props.router} path='/addproduct' title='Agregar Producto'/>
+          <CardOption router={this.props.router} path='/listproduct' title='Productos'/>
+          <CardOption router={this.props.router} path='/addinventory' title='Agregar Inventario'/>
+          <CardOption router={this.props.router} path='/listinventory' title='Inventarios'/>
+          <CardOption router={this.props.router} path='/addincidence' title='Agregar Incidencias'/>
+          <CardOption router={this.props.router} path='/listincidence' title='Incidencias'/>
         </div>
       );
     }else {
