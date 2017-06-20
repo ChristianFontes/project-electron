@@ -11,15 +11,21 @@
   "license": "MIT",
   "dependencies": {
     "babel-runtime": "^6.22.0",
+    "material-ui": "^0.18.1",
+    "normalize.css": "^7.0.0",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
+    "react-fetch": "0.0.9",
     "react-redux": "^5.0.2",
     "react-router": "^3.0.2",
     "react-router-redux": "^4.0.7",
+    "react-tap-event-plugin": "^2.0.1",
     "redux": "^3.0.0",
     "redux-actions": "^1.2.1",
     "redux-localstorage": "^0.4.1",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "sails.io.js": "^1.1.12",
+    "socket.io-client": "^2.0.2"
   },
   "devDependencies": {
     "babel-cli": "^6.22.2",

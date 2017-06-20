@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import userActions from '../actions/user';
-import LoggedIn from '../components/LoggedIn';
+import AddIncidence from '../components/AddIncidence';
 
 const mapStateToProps = (state) => {
   return state;
@@ -14,4 +14,4 @@ const mapDispatchToProps = (dispatch) => { // eslint-disable-line no-unused-vars
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoggedIn);
+export default connect(mapStateToProps, mapDispatchToProps)(AddIncidence);
