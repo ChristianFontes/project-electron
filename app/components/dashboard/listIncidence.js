@@ -3,6 +3,10 @@ import Avatar from 'material-ui/Avatar';
 import Chip from 'material-ui/Chip';
 import FontIcon from 'material-ui/FontIcon';
 import SvgIconFace from 'material-ui/svg-icons/action/face';
+import {List, ListItem} from 'material-ui/List';
+import Divider from 'material-ui/Divider';
+import Subheader from 'material-ui/Subheader';
+import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors';
 import { inventory, incidence } from '../../api/constants';
 import {
   Table,
@@ -78,7 +82,7 @@ export default class Incidences extends Component {
         marginLeft: '15%'
       }
       let obj = this.state.selection;
-      let createdBy = 'Incidencia registrada el: ' + this.formatDate(obj.createdAt);
+      let createdBy = 'Incidencia registrada por '+ obj.user[0].userName +' el: ' + this.formatDate(obj.createdAt);
       return(
         <Card style={style}>
           <CardHeader
@@ -90,10 +94,24 @@ export default class Incidences extends Component {
           <CardText expandable={true}>
             <div style={content}>
             <Chip>
-              <Avatar size={32}>G</Avatar>
-              {this.checkIfExist(obj.user[0], 'userName')}
+              <Avatar size={32}>I</Avatar>
+              Inventario
             </Chip>
-              
+            <List>
+              <Subheader>Fecha del Inventario: {this.formatDate(obj.inventory[0].createdAt)}</Subheader>
+              <ListItem
+                leftAvatar={<Avatar src="images/b3.png" />}
+                primaryText={obj.inventory[0].observations}
+                secondaryText={
+                  <p>
+                    <span style={{color: darkBlack}}>Cantidad de articulos:  </span>
+                    {obj.inventory[0].quantity}
+                  </p>
+                }
+                secondaryTextLines={2}
+              />
+              <Divider inset={true} />
+            </List>
             </div>
             <CardActions>
               <FlatButton label="Cerrar" onClick={() => this.setState({

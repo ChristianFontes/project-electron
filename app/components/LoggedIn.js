@@ -16,7 +16,7 @@ export default class LoggedIn extends Component {
 
   render() {
     const { typeMember, name, lastName } = this.props.user;
-    let imgUrl = '../app/images/bg.jpg';
+    let imgUrl = 'images/bg.jpg';
     let fullName = name + ' ' + lastName;
     var background = {
         width: '100%',
@@ -32,7 +32,7 @@ export default class LoggedIn extends Component {
     if (typeMember == 'Gestor') {
       return (
         <div style={background}>
-          <BarUser name={fullName} />
+          <BarUser name={fullName} router={this.props.router} dispatch={this.props.onLogin}/>
           <CardOption router={this.props.router} path='/addmember' title='Agregar Empleado'/>
           <CardOption router={this.props.router} path='/listmember' title='Lista de Empleados'/>
           <CardOption router={this.props.router} path='/addticket' title='Agregar Ticket'/>
@@ -48,7 +48,7 @@ export default class LoggedIn extends Component {
     }else {
       return (
         <div style={background}>
-          <BarUser name={fullName} />
+          <BarUser name={fullName} router={this.props.router} dispatch={this.props.onLogin}/>
           <Ticket id={this.props.user.id} create={true}/>
           <MyListTicket id={this.props.user.id}/>
         </div>

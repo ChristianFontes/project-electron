@@ -32,23 +32,6 @@ export default class InputField extends Component {
    };
   }
 
-  componentWillMount() {
-    // let that = this;
-    // fetch(sede) // Call the fetch function passing the url of the API as a parameter
-    // .then((resp) => resp.json())
-    // .then(function(data) {
-    //   const items = [];
-    //   for (let i = 0; i < data.length; i++ ) {
-    //     items.push(<MenuItem value={data[i].id} key={i} primaryText={`Sede de ${data[i].name}`} />);
-    //   }
-    //   that.setState({arraySede: items});
-    // })
-    // .catch(function(err) {
-    //     // This is where you run code if the server returns any errors
-    //     console.log(err);
-    // });
-  }
-
   handleChangeName = (event) => {
    this.setState({
      tickeTitle: event.target.value
@@ -104,93 +87,6 @@ export default class InputField extends Component {
           })
         }
       });
-  }
-
-
-  handleUpdate = () => {
-    // const { id } = this.props.data;
-    // const { goBack } = this.props;
-    //
-    // const url = register + '/' + id;
-    // let credentials = {
-    //   name: this.state.name,
-    //   lastName: this.state.lastName,
-    //   email: this.state.email,
-    //   typeMember: 'Empleado',
-    //   userName: this.state.userName,
-    //   password: this.state.password,
-    //   sede: this.state.valueSede,
-    //   departament: this.state.valueDepartament
-    // }
-    // fetch(url, {
-    //   method: 'PUT',
-    //   headers: {
-    //     'Accept': 'application/json, text/plain, */*',
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify(credentials)
-    // }).then(res => res.json())
-    //   .then(res => {
-    //     console.log(res);
-    //     if (res.user) {
-    //       this.setState({
-    //         name: '',
-    //         lastName: '',
-    //         email: '',
-    //         password: '',
-    //         userName: '',
-    //         errorUserName: '',
-    //         errorEmail: '',
-    //         errorPassword: '',
-    //         errorName: '',
-    //         errorLastName: '',
-    //       });
-    //       goBack();
-    //     }
-    //     if (res.err) {
-    //       if (res.err.invalidAttributes.name) {
-    //         if (res.err.invalidAttributes.name[0].rule == 'required') {
-    //           this.setState({errorName: 'El nombre es requerido'});
-    //         }
-    //       }
-    //       if (!res.err.invalidAttributes.name) {
-    //         this.setState({errorName: ''});
-    //       }
-    //       if (res.err.invalidAttributes.lastName) {
-    //         if (res.err.invalidAttributes.lastName[0].rule == 'required') {
-    //           this.setState({errorLastName: 'El apellido es requerido'});
-    //         }
-    //       }
-    //       if (!res.err.invalidAttributes.lastName) {
-    //         this.setState({errorLastName: ''});
-    //       }
-    //       if (res.err.invalidAttributes.userName) {
-    //         if (res.err.invalidAttributes.userName[0].rule == 'required') {
-    //           this.setState({errorUserName: 'El nombre de usuario es requerido'});
-    //         }
-    //       }
-    //       if (!res.err.invalidAttributes.userName) {
-    //         this.setState({errorUserName: ''});
-    //       }
-    //       if (res.err.invalidAttributes.email) {
-    //         if (res.err.invalidAttributes.email[0].rule == 'email') {
-    //           this.setState({errorEmail: 'El email no es valido'});
-    //         }
-    //       }
-    //       if (!res.err.invalidAttributes.email) {
-    //         this.setState({errorEmail: ''});
-    //       }
-    //       if (res.err.invalidAttributes.password) {
-    //         if (res.err.invalidAttributes.password[0].rule == 'required') {
-    //           this.setState({errorPassword: 'El password es requerido'});
-    //         }
-    //       }
-    //       if (!res.err.invalidAttributes.password) {
-    //         this.setState({errorPassword: ''});
-    //       }
-    //     }
-    //   }
-    // );
   }
 
   buttonAction = () => {

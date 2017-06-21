@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {TextField, RaisedButton, AppBar} from 'material-ui';
+import {TextField, RaisedButton, AppBar, Card} from 'material-ui';
 import FlatButton from 'material-ui/FlatButton';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
@@ -8,7 +8,6 @@ import { provider, product } from '../../api/constants';
 export default class Product extends Component {
   constructor(props) {
    super(props);
-   console.log(this.props);
    const { name, brand, model, serial, id } = this.props.product;
    this.state = {
      id,
@@ -87,7 +86,6 @@ export default class Product extends Component {
       body: JSON.stringify(credentials)
     }).then(res => res.json())
       .then(res => {
-        console.log(res);
         if (res.id) {
           this.setState({
             name: '',
@@ -176,7 +174,7 @@ export default class Product extends Component {
           {this.state.arrayProvider}
         </SelectField>
         <div style={{width: '50%', margin: '0 auto'}}>
-          <RaisedButton label="Registrar" primary={true} onClick={::this.handleRegister}/>
+          <RaisedButton label="Actualizar" primary={true} onClick={::this.handleRegister}/>
         </div>
       </div>
     );

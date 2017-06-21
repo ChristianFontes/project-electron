@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import Avatar from 'material-ui/Avatar';
 import Chip from 'material-ui/Chip';
+import {List, ListItem} from 'material-ui/List';
+import Divider from 'material-ui/Divider';
+import Subheader from 'material-ui/Subheader';
+import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors';
 import FontIcon from 'material-ui/FontIcon';
 import SvgIconFace from 'material-ui/svg-icons/action/face';
 import { inventory } from '../../api/constants';
@@ -77,7 +81,11 @@ export default class ListMember extends Component {
         marginLeft: '15%'
       }
       let obj = this.state.selection;
+      console.log(obj);
       let createdBy = 'Inventario registrado el: ' + this.formatDate(obj.createdAt);
+      let serialAndName = obj.products[0].serial + ' ' + obj.products[0].name;
+      let brandAndModel = obj.products[0].brand + ', ' + obj.products[0].model;
+      let nameAndLastName = obj.user[0].name + ' ' + obj.user[0].lastName;
       return(
         <Card style={style}>
           <CardHeader
@@ -88,12 +96,49 @@ export default class ListMember extends Component {
           />
           <CardText expandable={true}>
             <div style={content}>
-            <Chip>
-              <Avatar size={32}>G</Avatar>
-              {this.checkIfExist(obj.user[0], 'userName')}
-            </Chip>
-              <h4>Observaciones: {obj.observations}</h4>
-              <h4>Cantidad: {obj.quantity}</h4>
+                <List>
+                  <Subheader>Inventario</Subheader>
+                  <ListItem
+                    leftAvatar={<Avatar size={32}>I</Avatar>}
+                    primaryText={obj.observations}
+                    secondaryText={
+                      <p>
+                        <span style={{color: darkBlack}}>Cantidad:  </span>
+                        {obj.quantity}
+                      </p>
+                    }
+                  />
+                  <Divider inset={true} />
+                  <Subheader>Producto</Subheader>
+                  <ListItem
+                    leftAvatar={<Avatar size={32}>P</Avatar>}
+                    primaryText={serialAndName}
+                    secondaryText={
+                      <p>
+                        <span style={{color: darkBlack}}>Marca y Modelo </span>
+                        {brandAndModel}
+                      </p>
+                    }
+                  />
+                  <Divider inset={true} />
+                  <Subheader>Sede</Subheader>
+                  <ListItem
+                    leftAvatar={<Avatar size={32}>S</Avatar>}
+                    primaryText={obj.sede[0].name}
+                  />
+                  <Divider inset={true} />
+                  <Subheader>Gestor</Subheader>
+                  <ListItem
+                    leftAvatar={<Avatar size={32}>G</Avatar>}
+                    primaryText={nameAndLastName}
+                    secondaryText={
+                      <p>
+                        <span style={{color: darkBlack}}>{obj.user[0].userName} </span>
+                        {obj.user[0].email}
+                      </p>
+                    }
+                  />
+                </List>
             </div>
             <CardActions>
               <FlatButton label="Cerrar" onClick={() => this.setState({
@@ -107,7 +152,7 @@ export default class ListMember extends Component {
     }
     return (
       <AppBar style={{backgroundColor: 'transparent', border: 'none'}}
-        title="Lista de Productos"
+        title="Lista de Inventarios"
         showMenuIconButton={false}
       />
     );
@@ -219,6 +264,8 @@ export default class ListMember extends Component {
         return data.userName;
       }else if (type == 'typeMember') {
         return data.typeMember;
+      }else if (type == 'name') {
+        return data.name;
       }
     }else{
       return null;
@@ -255,8 +302,8 @@ export default class ListMember extends Component {
                 <TableRow key={index}>
                   <TableRowColumn>{data[index].observations}</TableRowColumn>
                   <TableRowColumn>{data[index].quantity}</TableRowColumn>
-                  <TableRowColumn>{data[index].products[0].name}</TableRowColumn>
-                  <TableRowColumn>{data[index].sede[0].name}</TableRowColumn>
+                  <TableRowColumn>{this.checkIfExist(data[index].products[0], 'name')}</TableRowColumn>
+                  <TableRowColumn>{this.checkIfExist(data[index].sede[0], 'name')}</TableRowColumn>
                   <TableRowColumn>{this.checkIfExist(data[index].user[0], 'userName')}</TableRowColumn>
                   <TableRowColumn>{this.formatDate(data[index].createdAt)}</TableRowColumn>
                 </TableRow>

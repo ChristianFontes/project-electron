@@ -1,4 +1,10 @@
 import React, { Component } from 'react';
+import {List, ListItem} from 'material-ui/List';
+import Divider from 'material-ui/Divider';
+import Subheader from 'material-ui/Subheader';
+import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors';
+import Chip from 'material-ui/Chip';
+import Avatar from 'material-ui/Avatar';
 import { product } from '../../api/constants';
 import {
   Table,
@@ -74,6 +80,9 @@ export default class ListMember extends Component {
       }
       let obj = this.state.selection;
       let createdBy = 'Producto registrado el: ' + this.formatDate(obj.createdAt);
+      let brandAndModel = obj.brand + ', ' + obj.model;
+      let serialAndName = obj.serial + ' ' + obj.name;
+      let nameAndLastName = obj.user[0].name + ' ' + obj.user[0].lastName;
       return(
         <Card style={style}>
           <CardHeader
@@ -84,11 +93,37 @@ export default class ListMember extends Component {
           />
           <CardText expandable={true}>
             <div style={content}>
-              <h4>Nombre del Producto: {obj.name}</h4>
-              <h4>Marca del Producto: {obj.brand}</h4>
-              <h4>Modelo del Producto: {obj.model}</h4>
-              <h3>Datos del Proveedor</h3>
-              <h4>Nombre del Proveedor: {obj.provider[0].name}</h4>
+              <List>
+                <Subheader>Producto</Subheader>
+                <ListItem
+                  leftAvatar={<Avatar src="images/b2.png" />}
+                  primaryText={serialAndName}
+                  secondaryText={
+                    <p>
+                      <span style={{color: darkBlack}}>Marca y Modelo:  </span>
+                      {brandAndModel}
+                    </p>
+                  }
+                />
+                <Divider inset={true} />
+                <Subheader>Proveedor</Subheader>
+                <ListItem
+                  leftAvatar={<Avatar size={32}>P</Avatar>}
+                  primaryText={obj.provider[0].name}
+                />
+                <Divider inset={true} />
+                <Subheader>Gestor</Subheader>
+                <ListItem
+                  leftAvatar={<Avatar size={32}>G</Avatar>}
+                  primaryText={nameAndLastName}
+                  secondaryText={
+                    <p>
+                      <span style={{color: darkBlack}}>{obj.user[0].userName} </span>
+                      {obj.user[0].email}
+                    </p>
+                  }
+                />
+              </List>
             </div>
             <CardActions>
               <FlatButton label="Cerrar" onClick={() => this.setState({
@@ -224,9 +259,9 @@ export default class ListMember extends Component {
   render() {
     const data = this.state.data;
     const styleTable = {
-      width: '80%',
-      marginLeft: '10%',
-      marginRigth: '10%',
+      width: '95%',
+      marginLeft: '2.5%',
+      marginRigth: '2.5%',
       paddingBottom: 30,
     }
 

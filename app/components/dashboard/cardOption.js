@@ -7,7 +7,7 @@ export default class CardOption extends Component {
   }
 
   render() {
-    let imgUrl = '../app/images/b6.png';
+    let imgUrl = 'images/b6.png';
     const { router, path, title } = this.props
     const style = {
       width: '30%',

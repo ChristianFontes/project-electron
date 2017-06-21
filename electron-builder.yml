@@ -1,6 +1,6 @@
-appId: com.example.app
-copyright: Example co
-productName: MyApp
+appId: com.cfqhelpdesk.app
+copyright: GeeksSolutions
+productName: CFQHelpDesk
 
 asar: true
 

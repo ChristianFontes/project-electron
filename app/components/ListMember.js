@@ -9,7 +9,7 @@ export default class ListMember extends Component {
 
   render() {
     const { typeMember, token } = this.props.user;
-    let imgUrl = '../app/images/bg.jpg';
+    let imgUrl = 'images/bg.jpg';
     var background = {
         width: '100%',
         height: '100%',

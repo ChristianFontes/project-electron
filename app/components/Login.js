@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { TextField, RaisedButton, Card, CardHeader, CardTitle, CardText } from 'material-ui';
+import Avatar from 'material-ui/Avatar';
 import { login, register } from '../api/constants';
 
 export default class Login extends Component {
@@ -69,7 +70,6 @@ export default class Login extends Component {
       body: JSON.stringify(credentials)
     }).then(res => res.json())
       .then(res => {
-        console.log('id de resp', res.user.id);
         if (res.user) {
           let token = res.token;
           const { email, name, lastName, userName, typeMember, avatar, id } = res.user;
@@ -203,7 +203,7 @@ export default class Login extends Component {
 
   render() {
     const { showLogin } = this.state;
-    let imgUrl = '../app/images/bg.jpg';
+    let imgUrl = 'images/bg.jpg';
     var background = {
         width: '100%',
         height: '100%',
@@ -217,84 +217,98 @@ export default class Login extends Component {
       };
     var center = {
       width: '50%',
-      margin: '0 auto'
+      marginRight: '25%',
+      marginLeft: '25%',
+      borderRadius: 40,
+      fontSize: 19,
+      fontWeight: 'bold',
     }
     var centerButton = {
       width: '50%',
       margin: '0 auto',
-      marginTop: '5%'
+      marginTop: '2%'
     }
+    var logo = {
+      marginLeft: '40%',
+      marginBottom: '2%',
+      marginTop: '2%'
+    }
+
     if (showLogin) {
       return (
         <div style={background}>
-          <div style={center}>
-            <Card style={{marginTop: '10%'}}>
-              <CardTitle title="Iniciar Sesion" />
-              <CardText style={{width: '50%', margin: '0 auto'}}>
-                <TextField
-                  hintText="Nombre de Usuario"
-                  value={this.state.userName} onChange={this.handleChangeUserName}
-                  errorText={this.state.errorUserName}
-                /><br/>
-                <TextField
-                  type="password"
-                  hintText="Contraseña"
-                  value={this.state.password} onChange={this.handleChangePassword}
-                  errorText={this.state.errorPassword}
-                /><br/><br/>
-                <div style={{width: '50%', margin: '0 auto'}}>
-                  <RaisedButton label="Iniciar Sesion" primary={true} onClick={::this.handleLogin}/>
-                </div>
-              </CardText>
-            </Card>
-            <div style={centerButton}>
-            <RaisedButton label="Registrar una nueva cuenta" primary={true} onClick={::this.handleChangeView}/>
-            </div>
+          <Avatar
+            src="images/fondo.jpg"
+            size={250}
+            style={logo}
+          />
+          <Card style={center}>
+            <CardTitle title="Iniciar Sesión" />
+            <CardText style={center}>
+              <TextField
+                hintText="Nombre de Usuario"
+                value={this.state.userName} onChange={this.handleChangeUserName}
+                errorText={this.state.errorUserName}
+              /><br/>
+              <TextField
+                type="password"
+                hintText="Contraseña"
+                value={this.state.password} onChange={this.handleChangePassword}
+                errorText={this.state.errorPassword}
+              /><br/>
+            </CardText>
+            <RaisedButton label="Iniciar Sesion" primary={true} onClick={::this.handleLogin} fullWidth={true}/>
+          </Card>
+          <div style={centerButton}>
+          <RaisedButton label="Registrar una nueva cuenta" secondary={true} onClick={::this.handleChangeView} fullWidth={true}/>
           </div>
         </div>
       );
     }else {
       return (
         <div style={background}>
-          <div style={center}>
-            <Card style={{marginTop: '10%'}}>
-              <CardTitle title="Registrar" />
-              <CardText style={{width: '50%', margin: '0 auto'}}>
-                <TextField
-                  hintText="Nombres"
-                  value={this.state.name} onChange={this.handleChangeName}
-                  errorText={this.state.errorName}
-                /><br/>
-                <TextField
-                  hintText="Apellidos"
-                  value={this.state.lastName} onChange={this.handleChangeLastName}
-                  errorText={this.state.errorLastName}
-                /><br/>
-                <TextField
-                  hintText="Correo Electronico"
-                  value={this.state.email} onChange={this.handleChangeEmail}
-                  errorText={this.state.errorEmail}
-                /><br/>
-                <TextField
-                  hintText="Nombre de Usuario"
-                  value={this.state.userName} onChange={this.handleChangeUserName}
-                  errorText={this.state.errorUserName}
-                /><br/>
-                <TextField
-                  type="password"
-                  hintText="Contaseña"
-                  value={this.state.password} onChange={this.handleChangePassword}
-                  errorText={this.state.errorPassword}
-                /><br/><br/>
-                <div style={{width: '50%', margin: '0 auto'}}>
-                  <RaisedButton label="Registrarse" primary={true} onClick={::this.handleRegister}/>
-                </div>
-                </CardText>
-              </Card>
-              <div style={centerButton}>
-                <RaisedButton label="Iniciar Sesion con su cuenta" primary={true} onClick={::this.handleChangeView}/>
+          <Avatar
+            src="images/fondo.jpg"
+            size={250}
+            style={logo}
+          />
+          <Card style={center}>
+            <CardTitle title="Registrar un nuevo Gestor" />
+            <CardText style={center}>
+              <TextField
+                hintText="Nombres"
+                value={this.state.name} onChange={this.handleChangeName}
+                errorText={this.state.errorName}
+              /><br/>
+              <TextField
+                hintText="Apellidos"
+                value={this.state.lastName} onChange={this.handleChangeLastName}
+                errorText={this.state.errorLastName}
+              /><br/>
+              <TextField
+                hintText="Correo Electronico"
+                value={this.state.email} onChange={this.handleChangeEmail}
+                errorText={this.state.errorEmail}
+              /><br/>
+              <TextField
+                hintText="Nombre de Usuario"
+                value={this.state.userName} onChange={this.handleChangeUserName}
+                errorText={this.state.errorUserName}
+              /><br/>
+              <TextField
+                type="password"
+                hintText="Contaseña"
+                value={this.state.password} onChange={this.handleChangePassword}
+                errorText={this.state.errorPassword}
+              /><br/><br/>
+              <div style={{width: '50%', margin: '0 auto'}}>
+                <RaisedButton label="Registrar" primary={true} onClick={::this.handleRegister}/>
               </div>
-          </div>
+              </CardText>
+            </Card>
+            <div style={centerButton}>
+              <RaisedButton label="Iniciar Sesion con su cuenta" secondary={true} onClick={::this.handleChangeView} fullWidth={true}/>
+            </div>
         </div>
       );
     }

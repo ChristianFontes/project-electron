@@ -10,7 +10,7 @@ export default class LoggedIn extends Component {
 
   render() {
     const { name, typeMember } = this.props.user;
-    let imgUrl = '../app/images/bg.jpg';
+    let imgUrl = 'images/bg.jpg';
     var background = {
         width: '100%',
         height: '100%',

@@ -46,10 +46,12 @@ app.on('ready', async () => {
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
-    minWidth: 640,
-    minHeight: 480,
+    minWidth: 1200,
+    minHeight: 800,
     show: false
   });
+
+  mainWindow.maximize()
 
   mainWindow.loadURL(url.format({
     pathname: path.join(__dirname, 'index.html'),
