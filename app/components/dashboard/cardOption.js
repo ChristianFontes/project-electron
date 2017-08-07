@@ -13,7 +13,8 @@ export default class CardOption extends Component {
       width: '30%',
       height: 70,
       float: 'left',
-      margin: '1.5%',
+      margin: '1%',
+      marginLeft: '2%',
       backgroundImage: 'url(' + imgUrl + ')',
       backgroundSize: 'cover',
     }

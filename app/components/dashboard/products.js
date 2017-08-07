@@ -26,7 +26,7 @@ export default class ListMember extends Component {
    this.state = {
      data: null,
      selectedRow: {},
-     height: '600px'
+     height: '400px'
    };
   }
 
@@ -82,7 +82,7 @@ export default class ListMember extends Component {
       let createdBy = 'Producto registrado el: ' + this.formatDate(obj.createdAt);
       let brandAndModel = obj.brand + ', ' + obj.model;
       let serialAndName = obj.serial + ' ' + obj.name;
-      let nameAndLastName = obj.user[0].name + ' ' + obj.user[0].lastName;
+      let nameAndLastName = this.checkIfExist(obj.user[0], 'name') + ' ' + this.checkIfExist(obj.user[0], 'lastName');
       return(
         <Card style={style}>
           <CardHeader
@@ -109,7 +109,7 @@ export default class ListMember extends Component {
                 <Subheader>Proveedor</Subheader>
                 <ListItem
                   leftAvatar={<Avatar size={32}>P</Avatar>}
-                  primaryText={obj.provider[0].name}
+                  primaryText={this.checkIfExist(obj.provider[0], 'name')}
                 />
                 <Divider inset={true} />
                 <Subheader>Gestor</Subheader>
@@ -118,8 +118,8 @@ export default class ListMember extends Component {
                   primaryText={nameAndLastName}
                   secondaryText={
                     <p>
-                      <span style={{color: darkBlack}}>{obj.user[0].userName} </span>
-                      {obj.user[0].email}
+                      <span style={{color: darkBlack}}>{this.checkIfExist(obj.user[0], 'userName')} </span>
+                      {this.checkIfExist(obj.user[0], 'email')}
                     </p>
                   }
                 />
@@ -128,7 +128,7 @@ export default class ListMember extends Component {
             <CardActions>
               <FlatButton label="Cerrar" onClick={() => this.setState({
                 selection: null,
-                height: '250px'
+                height: '400px'
               })} />
             </CardActions>
           </CardText>
@@ -162,7 +162,7 @@ export default class ListMember extends Component {
             selection: null,
             delete: false,
             id: null,
-            height: '600px'
+            height: '400px'
           });
           this.getProducts();
         });
@@ -188,7 +188,8 @@ export default class ListMember extends Component {
   delete = (obj) => {
     this.setState({
       delete: true,
-      id: obj.id
+      id: obj.id,
+      height: '200px'
     });
   }
 
@@ -206,11 +207,11 @@ export default class ListMember extends Component {
         marginBottom: 10
       }
 
-      let deleteUser = 'Si deseo eliminar a '+ this.state.selection.name + ' ?';
+      let deleteUser = 'Si deseo eliminar a '+ this.state.selection.name + ' ' + this.state.selection.serial + ' ?';
 
       return (
         <CardActions style={style}>
-          <RaisedButton label={deleteUser} onClick={() => this.confirmation(true)} style={styleButton} primary={true} fullWidth={true} />
+          <RaisedButton label={deleteUser} onClick={() => this.confirmation(true)} style={styleButton} fullWidth={true} />
           <RaisedButton label='No eliminar' onClick={() => this.confirmation(false)} secondary={true} fullWidth={true} />
         </CardActions>
       );
@@ -220,8 +221,8 @@ export default class ListMember extends Component {
 
   renderButtones = () => {
     if (this.state.selection != null || this.state.selection != undefined) {
-      let titleEdit = 'Editar el producto ' + this.state.selection.name;
-      let titleDelete = 'Eliminar el producto ' + this.state.selection.name;
+      let titleEdit = 'Editar el producto ' + this.state.selection.name + ' ' + this.state.selection.serial;
+      let titleDelete = 'Eliminar el producto ' + this.state.selection.name + ' ' + this.state.selection.serial;
       const style = {
         width: '90%',
         marginLeft: '5%',
@@ -235,7 +236,7 @@ export default class ListMember extends Component {
 
       return (
         <CardActions style={style}>
-          <RaisedButton label={titleEdit} onClick={() => this.updateProduct(this.state.selection)} style={styleButton} primary={true} fullWidth={true} />
+          <RaisedButton label={titleEdit} onClick={() => this.updateProduct(this.state.selection)} style={styleButton} fullWidth={true} />
           <RaisedButton label={titleDelete} onClick={() => this.delete(this.state.selection)} secondary={true} fullWidth={true} />
           { this.renderConfirmation() }
         </CardActions>
@@ -250,6 +251,12 @@ export default class ListMember extends Component {
         return data.userName;
       }else if (type == 'typeMember') {
         return data.typeMember;
+      }else if (type == 'name') {
+        return data.name;
+      }else if (type == 'lastName') {
+        return data.lastName;
+      }else if (type == 'email') {
+        return data.email;
       }
     }else{
       return null;
@@ -290,7 +297,7 @@ export default class ListMember extends Component {
                   <TableRowColumn>{data[index].brand}</TableRowColumn>
                   <TableRowColumn>{data[index].model}</TableRowColumn>
                   <TableRowColumn>{this.checkIfExist(data[index].user[0], 'userName')}</TableRowColumn>
-                  <TableRowColumn>{data[index].provider[0].name}</TableRowColumn>
+                  <TableRowColumn>{this.checkIfExist(data[index].provider[0], 'name')}</TableRowColumn>
                   <TableRowColumn>{this.formatDate(data[index].createdAt)}</TableRowColumn>
                 </TableRow>
               ))

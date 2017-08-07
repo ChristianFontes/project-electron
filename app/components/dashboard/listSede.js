@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { register } from '../../api/constants';
+import { sede } from '../../api/constants';
 import {
   Table,
   TableBody,
@@ -29,15 +29,13 @@ export default class ListMember extends Component {
 
   getListUser = () => {
     const { token } = this.props;
-    let authToken = 'Bearer ' + token;
+
     let that = this;
-    let employee = register + '/?typeMember=Empleado'
-    fetch(employee, {
+    fetch(sede, {
       method: 'GET',
       headers: {
         'Accept': 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-        'authorization': authToken
+        'Content-Type': 'application/json'
       }
     })
     .then((resp) => resp.json())
@@ -74,17 +72,18 @@ export default class ListMember extends Component {
 
   updateUser = (obj) => {
     const { dispatch, router } = this.props;
-    let userToUpdate = {
-      userToUpdate: obj
+    obj["update"] = 'sede';
+    let dataToUpdate = {
+      dataToUpdate: obj
     };
-    dispatch(userToUpdate);
-    router.push('/editmember');
+    dispatch(dataToUpdate);
+    router.push('/editSPD');
   }
 
   confirmation = (value) => {
     if (value) {
       let id = '/' + this.state.id;
-      let url = register + id;
+      let url = sede + id;
       fetch(url, {
         method: 'DELETE'
       }).then(res => res.json())
@@ -120,11 +119,11 @@ export default class ListMember extends Component {
         marginBottom: 10
       }
 
-      let deleteUser = 'Si deseo eliminar a '+ this.state.selection.name + ' ' + this.state.selection.lastName;
+      let deleteUser = 'Si deseo eliminar a '+ this.state.selection.name + '?';
 
       return (
         <CardActions style={style}>
-          <RaisedButton label={deleteUser} onClick={() => this.confirmation(true)} style={styleButton} fullWidth={true} />
+          <RaisedButton label={deleteUser} onClick={() => this.confirmation(true)} style={styleButton} primary={true} fullWidth={true} />
           <RaisedButton label='No eliminar' onClick={() => this.confirmation(false)} secondary={true} fullWidth={true} />
         </CardActions>
       );
@@ -134,8 +133,8 @@ export default class ListMember extends Component {
 
   renderButtones = () => {
     if (this.state.selection != null || this.state.selection != undefined) {
-      let titleEdit = 'Editar al empleado ' + this.state.selection.name + ' ' + this.state.selection.lastName;
-      let titleDelete = 'Eliminar a ' + this.state.selection.name + ' ' + this.state.selection.lastName;
+      let titleEdit = 'Editar Sede ' + this.state.selection.name;
+      let titleDelete = 'Eliminar a ' + this.state.selection.name;
       const style = {
         width: '90%',
         marginLeft: '5%',
@@ -149,7 +148,7 @@ export default class ListMember extends Component {
 
       return (
         <CardActions style={style}>
-          <RaisedButton label={titleEdit} onClick={() => this.updateUser(this.state.selection)} style={styleButton} fullWidth={true} />
+          <RaisedButton label={titleEdit} onClick={() => this.updateUser(this.state.selection)} style={styleButton} primary={true} fullWidth={true} />
           <RaisedButton label={titleDelete} onClick={() => this.delete(this.state.selection)} secondary={true} fullWidth={true} />
           { this.renderConfirmation() }
         </CardActions>
@@ -180,18 +179,13 @@ export default class ListMember extends Component {
     return(
       <div style={styleTable}>
         <AppBar style={{backgroundColor: 'transparent', border: 'none'}}
-          title="Lista de Empleados"
+          title="Lista de Sedes"
           showMenuIconButton={false}
         />
         <Table onRowSelection={this.rowSelection} height={this.state.height}>
           <TableHeader>
             <TableRow>
-              <TableHeaderColumn>Nombres</TableHeaderColumn>
-              <TableHeaderColumn>Apellidos</TableHeaderColumn>
-              <TableHeaderColumn>Nombre de Usuario</TableHeaderColumn>
-              <TableHeaderColumn>Tipo de Miembro</TableHeaderColumn>
-              <TableHeaderColumn>Departamento</TableHeaderColumn>
-              <TableHeaderColumn>Sede</TableHeaderColumn>
+              <TableHeaderColumn>Nombre</TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -199,11 +193,6 @@ export default class ListMember extends Component {
               arrayMembers.map( (row, index) => (
                 <TableRow key={index}>
                   <TableRowColumn>{arrayMembers[index].name}</TableRowColumn>
-                  <TableRowColumn>{arrayMembers[index].lastName}</TableRowColumn>
-                  <TableRowColumn>{arrayMembers[index].userName}</TableRowColumn>
-                  <TableRowColumn>{arrayMembers[index].typeMember}</TableRowColumn>
-                  <TableRowColumn>{this.checkIfExist(arrayMembers[index].departament[0], 'name')}</TableRowColumn>
-                  <TableRowColumn>{this.checkIfExist(arrayMembers[index].sede[0], 'name')}</TableRowColumn>
                 </TableRow>
               ))
             }

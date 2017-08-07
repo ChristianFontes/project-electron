@@ -7,7 +7,7 @@ const bsync = browserSync.create();
 
 const getRootUrl = (options) => {
   const port = options.get('port');
-  return `http://localhost:${port}`;
+  return `http://127.0.0.1:${port}`;
 };
 
 const getClientUrl = (options) => {

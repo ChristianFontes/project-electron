@@ -21,9 +21,9 @@ export default class InputField extends Component {
      errorName: '',
      errorLastName: '',
      arraySede: [],
-     valueSede: 1,
+     valueSede: null,
      arrayDepartament: [],
-     valueDepartament: 1
+     valueDepartament: null
    };
   }
 
@@ -34,6 +34,9 @@ export default class InputField extends Component {
     .then(function(data) {
       const items = [];
       for (let i = 0; i < data.length; i++ ) {
+        if (that.state.valueSede == null) {
+          that.setState({valueSede: data[i].id});
+        }
         items.push(<MenuItem value={data[i].id} key={i} primaryText={`Sede de ${data[i].name}`} />);
       }
       that.setState({arraySede: items});
@@ -48,6 +51,9 @@ export default class InputField extends Component {
     .then(function(data) {
       const items = [];
       for (let i = 0; i < data.length; i++ ) {
+        if (that.state.valueDepartament == null) {
+          that.setState({valueDepartament: data[i].id});
+        }
         items.push(<MenuItem value={data[i].id} key={i} primaryText={`Departamento de ${data[i].name}`} />);
       }
       that.setState({arrayDepartament: items});

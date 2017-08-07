@@ -46,12 +46,13 @@ app.on('ready', async () => {
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
-    minWidth: 1200,
-    minHeight: 800,
+    minWidth: 1000,
+    minHeight: 600,
+    backgroundColor: '#312450',
     show: false
   });
 
-  mainWindow.maximize()
+  mainWindow.maximize();
 
   mainWindow.loadURL(url.format({
     pathname: path.join(__dirname, 'index.html'),
@@ -94,7 +95,6 @@ app.on('ready', async () => {
   if (isDevelopment) {
     // auto-open dev tools
     mainWindow.webContents.openDevTools();
-
     // add inspect element on right click menu
     mainWindow.webContents.on('context-menu', (e, props) => {
       Menu.buildFromTemplate([{

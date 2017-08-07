@@ -31,7 +31,7 @@ export default class ListMember extends Component {
     const { token } = this.props;
     let authToken = 'Bearer ' + token;
     let that = this;
-    let employee = register + '/?typeMember=Empleado'
+    let employee = register + '/?typeMember=Gestor'
     fetch(employee, {
       method: 'GET',
       headers: {
@@ -120,11 +120,11 @@ export default class ListMember extends Component {
         marginBottom: 10
       }
 
-      let deleteUser = 'Si deseo eliminar a '+ this.state.selection.name + ' ' + this.state.selection.lastName;
+      let deleteUser = 'Si deseo eliminar a '+ this.state.selection.name + ' ' + this.state.selection.lastName + '?';
 
       return (
         <CardActions style={style}>
-          <RaisedButton label={deleteUser} onClick={() => this.confirmation(true)} style={styleButton} fullWidth={true} />
+          <RaisedButton label={deleteUser} onClick={() => this.confirmation(true)} style={styleButton} primary={true} fullWidth={true} />
           <RaisedButton label='No eliminar' onClick={() => this.confirmation(false)} secondary={true} fullWidth={true} />
         </CardActions>
       );
@@ -134,7 +134,7 @@ export default class ListMember extends Component {
 
   renderButtones = () => {
     if (this.state.selection != null || this.state.selection != undefined) {
-      let titleEdit = 'Editar al empleado ' + this.state.selection.name + ' ' + this.state.selection.lastName;
+      let titleEdit = 'Editar al Gestor ' + this.state.selection.name + ' ' + this.state.selection.lastName;
       let titleDelete = 'Eliminar a ' + this.state.selection.name + ' ' + this.state.selection.lastName;
       const style = {
         width: '90%',
@@ -149,7 +149,7 @@ export default class ListMember extends Component {
 
       return (
         <CardActions style={style}>
-          <RaisedButton label={titleEdit} onClick={() => this.updateUser(this.state.selection)} style={styleButton} fullWidth={true} />
+          <RaisedButton label={titleEdit} onClick={() => this.updateUser(this.state.selection)} style={styleButton} primary={true} fullWidth={true} />
           <RaisedButton label={titleDelete} onClick={() => this.delete(this.state.selection)} secondary={true} fullWidth={true} />
           { this.renderConfirmation() }
         </CardActions>
@@ -180,7 +180,7 @@ export default class ListMember extends Component {
     return(
       <div style={styleTable}>
         <AppBar style={{backgroundColor: 'transparent', border: 'none'}}
-          title="Lista de Empleados"
+          title="Lista de Gestores"
           showMenuIconButton={false}
         />
         <Table onRowSelection={this.rowSelection} height={this.state.height}>

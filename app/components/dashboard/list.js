@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { ticket } from '../../api/constants';
+require('pdfmake/build/pdfmake.min.js');
+let fonts = require('pdfmake/build/vfs_fonts.js');
+import { ticket, records } from '../../api/constants';
 import {
   Table,
   TableBody,
@@ -68,7 +70,7 @@ export default class ListMember extends Component {
       id: obj.id
     });
   }
-  
+
   confirmation = (value) => {
     if (value) {
       let id = '/' + this.state.id;
@@ -197,6 +199,7 @@ export default class ListMember extends Component {
         <Table onRowSelection={this.rowSelection} height={this.state.height}>
           <TableHeader>
             <TableRow>
+              <TableHeaderColumn>ID Ticket</TableHeaderColumn>
               <TableHeaderColumn>Titulo</TableHeaderColumn>
               <TableHeaderColumn>Enviado por</TableHeaderColumn>
               <TableHeaderColumn>Tipo de miembro</TableHeaderColumn>
@@ -207,6 +210,7 @@ export default class ListMember extends Component {
             {
               data.map( (row, index) => (
                 <TableRow key={index}>
+                  <TableRowColumn>{data[index].id}</TableRowColumn>
                   <TableRowColumn>{data[index].title}</TableRowColumn>
                   <TableRowColumn>{this.checkIfExist(data[index].user[0], 'userName')}</TableRowColumn>
                   <TableRowColumn>{this.checkIfExist(data[index].user[0], 'typeMember')}</TableRowColumn>

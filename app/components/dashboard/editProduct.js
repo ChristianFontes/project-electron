@@ -9,9 +9,18 @@ export default class Product extends Component {
   constructor(props) {
    super(props);
    const { name, brand, model, serial, id } = this.props.product;
+   console.log(this.props);
+   let idProvider = null,
+       idUser = null;
+   if (this.props.product.provider[0] != undefined) {
+     idProvider = this.props.product.provider[0].id;
+   }
+   if (this.props.product.user[0] != undefined){
+     idUser = this.props.product.user[0].id;
+   }
    this.state = {
      id,
-     userID: this.props.product.user[0].id,
+     userID: idUser,
      name,
      serial,
      model,
@@ -21,7 +30,7 @@ export default class Product extends Component {
      errorModel: '',
      errorBrand: '',
      arrayProvider: [],
-     valueProvider: this.props.product.provider[0].id,
+     valueProvider: idProvider,
    };
   }
 
@@ -32,6 +41,9 @@ export default class Product extends Component {
     .then(function(data) {
       const items = [];
       for (let i = 0; i < data.length; i++ ) {
+        if (that.state.valueProvider == null) {
+          that.setState({valueProvider: data[i].id});
+        }
         items.push(<MenuItem value={data[i].id} key={i} primaryText={`Proveedor ${data[i].name}`} />);
       }
       that.setState({arrayProvider: items});
@@ -95,8 +107,7 @@ export default class Product extends Component {
             errorName: '',
             errorSerial: '',
             errorModel: '',
-            errorBrand: '',
-            valueProvider: 1,
+            errorBrand: ''
           });
         } else {
           if (res.invalidAttributes.name) {

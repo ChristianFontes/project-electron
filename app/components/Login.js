@@ -120,10 +120,9 @@ export default class Login extends Component {
       body: JSON.stringify(credentials)
     }).then(res => res.json())
       .then(res => {
-        console.log(res);
         if (res.user) {
-          const { email, name, lastName, avatar } = res.user;
-          onLogin({ email, name, lastName, avatar, loggedIn: true });
+          const { email, name, lastName, avatar, typeMember } = res.user;
+          onLogin({ email, name, lastName, avatar,  typeMember, loggedIn: true });
           this.setState({
             name: '',
             lastName: '',
@@ -234,6 +233,12 @@ export default class Login extends Component {
       marginTop: '2%'
     }
 
+    var logoRegister = {
+      marginLeft: '45%',
+      marginBottom: '2%',
+      marginTop: '2%'
+    }
+
     if (showLogin) {
       return (
         <div style={background}>
@@ -269,8 +274,8 @@ export default class Login extends Component {
         <div style={background}>
           <Avatar
             src="images/fondo.jpg"
-            size={250}
-            style={logo}
+            size={150}
+            style={logoRegister}
           />
           <Card style={center}>
             <CardTitle title="Registrar un nuevo Gestor" />

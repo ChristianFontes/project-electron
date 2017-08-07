@@ -19,7 +19,7 @@ export default class Product extends Component {
      errorModel: '',
      errorBrand: '',
      arrayProvider: [],
-     valueProvider: 1,
+     valueProvider: null,
    };
   }
 
@@ -30,6 +30,9 @@ export default class Product extends Component {
     .then(function(data) {
       const items = [];
       for (let i = 0; i < data.length; i++ ) {
+        if (that.state.valueProvider == null) {
+          that.setState({valueProvider: data[i].id});
+        }
         items.push(<MenuItem value={data[i].id} key={i} primaryText={`Proveedor ${data[i].name}`} />);
       }
       that.setState({arrayProvider: items});
@@ -83,21 +86,19 @@ export default class Product extends Component {
       body: JSON.stringify(credentials)
     }).then(res => res.json())
       .then(res => {
-        console.log(res);
+        console.log(res.name);
         if (res.id) {
           this.setState({
-            name: '',
             serial: '',
-            model: '',
-            brand: '',
             errorName: '',
             errorSerial: '',
             errorModel: '',
-            errorBrand: '',
-            valueProvider: 1,
+            errorBrand: ''
           });
         }
-
+        if (res.name == 'Error') {
+          this.setState({errorSerial: 'Serial registrado'});
+        }
         if (res.invalidAttributes.name) {
           if (res.invalidAttributes.name[0].rule == 'required') {
             this.setState({errorName: 'El nombre es requerido'});

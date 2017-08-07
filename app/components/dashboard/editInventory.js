@@ -11,6 +11,18 @@ export default class Inventory extends Component {
    super(props);
    const { observations, quantity, id, sede, products, user } = this.props.inventory;
    console.log(this.props);
+   let sedeId = null,
+       productId = null,
+       idUser = null;
+   if (sede[0] != undefined) {
+     sedeId = sede[0].id;
+   }
+   if (products[0] != undefined) {
+     productId = products[0].id;
+   }
+   if (user[0] != undefined){
+     idUser = user[0].id;
+   }
    this.state = {
      id,
      observations,
@@ -18,10 +30,10 @@ export default class Inventory extends Component {
      errorObservations: '',
      errorQuantity: '',
      arraySedes: [],
-     valueSedes: sede[0].id,
+     valueSedes: sedeId,
      arrayProducts: [],
-     valueProducts: products[0].id,
-     user: user[0].id
+     valueProducts: productId,
+     user: idUser
    };
   }
 
@@ -32,6 +44,9 @@ export default class Inventory extends Component {
     .then(function(data) {
       const items = [];
       for (let i = 0; i < data.length; i++ ) {
+        if (that.state.valueSedes == null) {
+          that.setState({valueSedes: data[i].id});
+        }
         items.push(<MenuItem value={data[i].id} key={i} primaryText={`Sede de ${data[i].name}`} />);
       }
       that.setState({arraySedes: items});
@@ -46,6 +61,9 @@ export default class Inventory extends Component {
     .then(function(data) {
       const items = [];
       for (let i = 0; i < data.length; i++ ) {
+        if (that.state.valueProducts == null) {
+          that.setState({valueProducts: data[i].id});
+        }
         items.push(<MenuItem value={data[i].id} key={i} primaryText={`${data[i].name}`} />);
       }
       that.setState({arrayProducts: items});
@@ -78,6 +96,7 @@ export default class Inventory extends Component {
 
   handleUpdate = () => {
     const { observations, quantity, valueProducts, valueSedes, id, user } = this.state;
+    const { goBack } = this.props;
     let credentials = {
       observations, quantity, user, products: valueProducts, sede: valueSedes
     }
@@ -98,9 +117,8 @@ export default class Inventory extends Component {
             quantity: 0,
             errorObservations: '',
             errorQuantity: '',
-            valueSedes: 1,
-            valueProducts: 1,
           });
+          goBack();
         } else {
           if (res.invalidAttributes.name) {
             if (res.invalidAttributes.name[0].rule == 'required') {
@@ -161,19 +179,8 @@ export default class Inventory extends Component {
         >
           {this.state.arraySedes}
         </SelectField><br/>
-        <SelectField
-          value={this.state.valueProducts}
-          onChange={this.handleChangeProducts}
-          maxHeight={200}
-        >
-          {this.state.arrayProducts}
-        </SelectField><br/>
-        <TextField
-          hintText="Cantidad de articulos"
-          value={this.state.quantity} onChange={this.handleChangeQuantity}
-          errorText={this.state.errorQuantity}
-        /><br/>
-        <div style={{width: '50%', margin: '0 auto'}}>
+        <br/>
+        <div style={{width: '100%', marginLeft: '25px'}}>
           <RaisedButton label="Actualizar Inventario" primary={true} onClick={::this.handleUpdate}/>
         </div>
       </div>

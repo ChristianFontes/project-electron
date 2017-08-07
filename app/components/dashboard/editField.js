@@ -9,7 +9,7 @@ export default class InputField extends Component {
 
   constructor(props) {
    super(props);
-   const { email, name, lastName, userName, departament, sede } = this.props.data;
+   const { email, name, lastName, userName, departament, sede, typeMember } = this.props.data;
    let mySede = 1;
    let myDepartment = 1;
    if (sede[0]) {
@@ -23,6 +23,7 @@ export default class InputField extends Component {
      lastName,
      userName,
      email,
+     typeMember,
      password: '',
      errorUserName: '',
      errorEmail: '',
@@ -114,7 +115,7 @@ export default class InputField extends Component {
       name: this.state.name,
       lastName: this.state.lastName,
       email: this.state.email,
-      typeMember: 'Empleado',
+      typeMember: this.state.typeMember,
       userName: this.state.userName,
       password: this.state.password,
       sede: this.state.valueSede,
@@ -129,7 +130,6 @@ export default class InputField extends Component {
       body: JSON.stringify(credentials)
     }).then(res => res.json())
       .then(res => {
-        console.log(res);
         if (res.user) {
           this.setState({
             name: '',
@@ -242,7 +242,7 @@ export default class InputField extends Component {
         >
           {this.state.arrayDepartament}
         </SelectField>
-        <div style={{width: '100%', margin: '0 auto'}}>
+        <div style={{width: '100%', marginLeft: '25px'}}>
           <RaisedButton label="Actualizar Empleado" primary={true} onClick={::this.handleUpdate}/>
         </div>
       </div>

@@ -7,7 +7,7 @@ import Subheader from 'material-ui/Subheader';
 import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors';
 import FontIcon from 'material-ui/FontIcon';
 import SvgIconFace from 'material-ui/svg-icons/action/face';
-import { inventory } from '../../api/constants';
+import { inventory, listInventories } from '../../api/constants';
 import {
   Table,
   TableBody,
@@ -19,7 +19,9 @@ import {
   CardActions, CardHeader, CardText,
   FlatButton,
   AppBar,
-  RaisedButton
+  RaisedButton,
+  Tabs,
+   Tab
 } from 'material-ui';
 
 export default class ListMember extends Component {
@@ -27,13 +29,40 @@ export default class ListMember extends Component {
    super(props);
    this.state = {
      data: null,
+     listInventories: null,
      selectedRow: {},
-     height: '600px'
+     height: '400px',
+     value: null,
    };
   }
 
   componentWillMount = () => {
     this.getInventories();
+    this.getListInventories();
+  }
+
+  getListInventories = () => {
+    let that = this;
+    fetch(listInventories, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      }
+    })
+    .then((resp) => resp.json())
+    .then(function(listInventories) {
+      if (that.state.value == null) {
+        that.setState({
+          value: listInventories[0].name
+        });
+      }
+      that.setState({listInventories});
+    })
+    .catch(function(err) {
+        // This is where you run code if the server returns any errors
+        console.log(err);
+    });
   }
 
   getInventories = () => {
@@ -47,7 +76,13 @@ export default class ListMember extends Component {
     })
     .then((resp) => resp.json())
     .then(function(data) {
-      that.setState({data});
+      let arrayWithProducts = [];
+      for (var i = 0; i < data.length; i++) {
+        if (data[i].products[0] != undefined) {
+          arrayWithProducts.push(data[i]);
+        }
+      }
+      that.setState({data: arrayWithProducts});
     })
     .catch(function(err) {
         // This is where you run code if the server returns any errors
@@ -56,16 +91,25 @@ export default class ListMember extends Component {
   }
 
   rowSelection = (row) => {
+    let contador = 0;
     let id = row[0];
     let that = this;
     if (id != undefined) {
-      setTimeout(function() {
-        that.setState({
-          selection: that.state.data[id],
-          height: '300px',
-          delete: false
-        });
-      }, 500);
+      let allData = this.state.data;
+      let value = this.state.value;
+      let data = [];
+      for (var i = 0; i < allData.length; i++) {
+        if (allData[i].sede[0].name == value) {
+          if (id == contador) {
+            that.setState({
+              selection: allData[i],
+              height: '200px',
+              delete: false
+            });
+          }
+          contador++;
+        }
+      }
     }
   }
 
@@ -81,11 +125,10 @@ export default class ListMember extends Component {
         marginLeft: '15%'
       }
       let obj = this.state.selection;
-      console.log(obj);
       let createdBy = 'Inventario registrado el: ' + this.formatDate(obj.createdAt);
-      let serialAndName = obj.products[0].serial + ' ' + obj.products[0].name;
-      let brandAndModel = obj.products[0].brand + ', ' + obj.products[0].model;
-      let nameAndLastName = obj.user[0].name + ' ' + obj.user[0].lastName;
+      let serialAndName = this.checkIfExist(obj.products[0], 'serial') + ' ' + this.checkIfExist(obj.products[0], 'name');
+      let brandAndModel = this.checkIfExist(obj.products[0], 'brand') + ', ' + this.checkIfExist(obj.products[0], 'model');
+      let nameAndLastName = this.checkIfExist(obj.user[0], 'name') + ' ' + this.checkIfExist(obj.user[0], 'lastName');
       return(
         <Card style={style}>
           <CardHeader
@@ -97,18 +140,6 @@ export default class ListMember extends Component {
           <CardText expandable={true}>
             <div style={content}>
                 <List>
-                  <Subheader>Inventario</Subheader>
-                  <ListItem
-                    leftAvatar={<Avatar size={32}>I</Avatar>}
-                    primaryText={obj.observations}
-                    secondaryText={
-                      <p>
-                        <span style={{color: darkBlack}}>Cantidad:  </span>
-                        {obj.quantity}
-                      </p>
-                    }
-                  />
-                  <Divider inset={true} />
                   <Subheader>Producto</Subheader>
                   <ListItem
                     leftAvatar={<Avatar size={32}>P</Avatar>}
@@ -124,7 +155,7 @@ export default class ListMember extends Component {
                   <Subheader>Sede</Subheader>
                   <ListItem
                     leftAvatar={<Avatar size={32}>S</Avatar>}
-                    primaryText={obj.sede[0].name}
+                    primaryText={this.checkIfExist(obj.sede[0], 'name')}
                   />
                   <Divider inset={true} />
                   <Subheader>Gestor</Subheader>
@@ -133,8 +164,8 @@ export default class ListMember extends Component {
                     primaryText={nameAndLastName}
                     secondaryText={
                       <p>
-                        <span style={{color: darkBlack}}>{obj.user[0].userName} </span>
-                        {obj.user[0].email}
+                        <span style={{color: darkBlack}}>{this.checkIfExist(obj.user[0], 'userName')} </span>
+                        {this.checkIfExist(obj.user[0], 'email')}
                       </p>
                     }
                   />
@@ -143,7 +174,7 @@ export default class ListMember extends Component {
             <CardActions>
               <FlatButton label="Cerrar" onClick={() => this.setState({
                 selection: null,
-                height: '250px'
+                height: '400px'
               })} />
             </CardActions>
           </CardText>
@@ -176,7 +207,8 @@ export default class ListMember extends Component {
           this.setState({
             selection: null,
             delete: false,
-            id: null
+            id: null,
+            height: '400px'
           });
           this.getInventories();
         });
@@ -234,8 +266,8 @@ export default class ListMember extends Component {
 
   renderButtones = () => {
     if (this.state.selection != null || this.state.selection != undefined) {
-      let titleEdit = 'Editar el Inventario ' + this.state.selection.observations;
-      let titleDelete = 'Eliminar el Inventario ' + this.state.selection.observations;
+      let titleEdit = 'Editar el Inventario ' + this.state.selection.products[0].name + ' ' + this.state.selection.products[0].serial;
+      let titleDelete = 'Eliminar el Inventario ' + this.state.selection.products[0].name + ' ' + this.state.selection.products[0].serial;
       const style = {
         width: '90%',
         marginLeft: '5%',
@@ -266,31 +298,46 @@ export default class ListMember extends Component {
         return data.typeMember;
       }else if (type == 'name') {
         return data.name;
+      }else if (type == 'email') {
+        return data.email;
+      }else if (type == 'brand') {
+        return data.brand;
+      }else if (type == 'model') {
+        return data.model;
+      }else if (type == 'serial') {
+        return data.serial;
+      }else if (type == 'lastName') {
+        return data.lastName;
       }
     }else{
       return null;
     }
   }
 
-  render() {
-    const data = this.state.data;
-    const styleTable = {
-      width: '80%',
-      marginLeft: '10%',
-      marginRigth: '10%',
-      paddingBottom: 30,
-    }
+  handleChange = (value) => {
+    this.setState({
+      value: value,
+    });
+  };
 
+  renderTab = () => {
+    let allData = this.state.data;
+    let value = this.state.value;
+    let data = [];
+    for (var i = 0; i < allData.length; i++) {
+      if (allData[i].sede[0].name == value) {
+        data.push(allData[i]);
+      }
+    }
     if (data != null) {
-      return(
-        <div style={styleTable}>
-        { this.renderProduct() }
+      return (
         <Table onRowSelection={this.rowSelection} height={this.state.height}>
           <TableHeader>
             <TableRow>
-              <TableHeaderColumn>Observaciones</TableHeaderColumn>
-              <TableHeaderColumn>Cantidad</TableHeaderColumn>
               <TableHeaderColumn>Producto</TableHeaderColumn>
+              <TableHeaderColumn>Serial</TableHeaderColumn>
+              <TableHeaderColumn>Modelo</TableHeaderColumn>
+              <TableHeaderColumn>Marca</TableHeaderColumn>
               <TableHeaderColumn>Sede</TableHeaderColumn>
               <TableHeaderColumn>Gestor</TableHeaderColumn>
               <TableHeaderColumn>Fecha</TableHeaderColumn>
@@ -300,9 +347,10 @@ export default class ListMember extends Component {
             {
               data.map( (row, index) => (
                 <TableRow key={index}>
-                  <TableRowColumn>{data[index].observations}</TableRowColumn>
-                  <TableRowColumn>{data[index].quantity}</TableRowColumn>
                   <TableRowColumn>{this.checkIfExist(data[index].products[0], 'name')}</TableRowColumn>
+                  <TableRowColumn>{this.checkIfExist(data[index].products[0], 'serial')}</TableRowColumn>
+                  <TableRowColumn>{this.checkIfExist(data[index].products[0], 'model')}</TableRowColumn>
+                  <TableRowColumn>{this.checkIfExist(data[index].products[0], 'brand')}</TableRowColumn>
                   <TableRowColumn>{this.checkIfExist(data[index].sede[0], 'name')}</TableRowColumn>
                   <TableRowColumn>{this.checkIfExist(data[index].user[0], 'userName')}</TableRowColumn>
                   <TableRowColumn>{this.formatDate(data[index].createdAt)}</TableRowColumn>
@@ -311,6 +359,64 @@ export default class ListMember extends Component {
             }
           </TableBody>
         </Table>
+      );
+    }
+    return null;
+  }
+
+  renderTabs = () => {
+    const data = this.state.listInventories;
+    const styles = {
+      headline: {
+        fontSize: 24,
+        paddingTop: 16,
+        marginBottom: 12,
+        fontWeight: 400,
+      },
+    };
+    if (data != null) {
+      return (
+        <Tabs
+          value={this.state.value}
+          onChange={this.handleChange}
+        >
+        {
+          data.map( (row, index) => (
+            <Tab label={data[index].name} value={data[index].name} key={index}>
+            </Tab>
+          ))
+        }
+        </Tabs>
+      );
+    }
+    return null;
+  }
+
+  render() {
+    const data = this.state.data;
+    const styleTable = {
+      width: '90%',
+      marginLeft: '5%',
+      marginRigth: '5%',
+      paddingBottom: 30,
+    }
+
+    const styles = {
+      headline: {
+        fontSize: 24,
+        paddingTop: 16,
+        marginBottom: 12,
+        fontWeight: 400,
+      },
+    };
+
+    if (data != null) {
+      return(
+        <div style={styleTable}>
+        { this.renderProduct() }
+        { this.renderTabs() }
+        { this.renderTab() }
+
         { this.renderButtones() }
         </div>
       );

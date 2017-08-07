@@ -1,7 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import Bar from './dashboard/bar';
 import List from './dashboard/list';
-import { ticket } from '../api/constants';
+import { ticket, io } from '../api/constants';
+
+
 
 export default class ListMember extends Component {
   static propTypes = {
@@ -34,8 +36,17 @@ export default class ListMember extends Component {
     });
   }
 
+  componentDidMount = () => {
+      io.socket.on('new ticket', function(obj) {
+        io.socket.get(ticket, function(data) {
+          this.setState({data});
+        }.bind(this));
+      }.bind(this));
+  }
+
   render() {
     const { typeMember } = this.props.user;
+
     let imgUrl = 'images/bg.jpg';
     var background = {
         width: '100%',

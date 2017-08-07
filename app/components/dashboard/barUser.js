@@ -9,9 +9,9 @@ export default class Bar extends Component {
   }
 
   render() {
-    const { name, dispatch, router } = this.props;
-    console.log(this.props);
-    let title = 'Bienvenido ' + name;
+    const { name, dispatch, router, member } = this.props;
+    console.log(member);
+    let title = 'Bienvenido ' + name + ' (' + member + ')';
     return (
       <AppBar
         style={{backgroundColor: 'transparent'}}
